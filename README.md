@@ -3,10 +3,10 @@
 ## ReactJS application built to search available boat trips by date.
 
 ### Running the app in the development mode (http://localhost:3000):
-`npm start`
+`yarn start`
 
 ### Running tests (Jest test runner):
-`npm test`
+`yarn test`
 
 ### Building the app for production:
-`npm run build`
+`yarn run build`
