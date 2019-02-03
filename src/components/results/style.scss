@@ -1,0 +1,13 @@
+@import '../../colors';
+
+.results {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  .placeholder {
+    align-self: center;
+    font-size: calc(200px + 2vmin);
+    color: $gray;
+    opacity: 0.1;
+  }
+}
