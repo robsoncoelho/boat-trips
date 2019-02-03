@@ -1,4 +1,44 @@
+@import "../../colors";
+
 .date {
+  text-align: center;
+  margin-top: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  p {
+    font-size: 20px;
+    margin-right: 5px;
+  }
+  button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    outline: none;
+    .disabled,
+    &:active {
+      opacity: 0.7;
+    }
+  }
+  svg {
+    margin-left: 5px;
+    font-size: 30px;
+    color: $blue;
+  }
+
+  // overrides React Dates styles
+  .DateInput {
+    width: 118px;
+  }
+  .DateInput_input {
+    padding: 11px 0px 9px;
     text-align: center;
-    margin-top: 10%;
+    border-bottom: 2px solid $blue;
+  }
+  .CalendarDay__selected,
+  .CalendarDay__selected:active,
+  .CalendarDay__selected:hover {
+    background: $blue;
+    border: 1px double $blue;
+  }
 }
