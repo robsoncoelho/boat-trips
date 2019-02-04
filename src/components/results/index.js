@@ -3,32 +3,32 @@ import Column from "./column";
 import { connect } from "react-redux";
 import MdDirectionsBoat from "react-icons/lib/md/directions-boat";
 import FaAnchor from "react-icons/lib/fa/anchor";
+import MdCloudOff from "react-icons/lib/md/cloud-off";
 
 import "./style.scss";
 
 class Results extends Component {
-  // ticketByDate = data => 
-  //   data.map(item => <Column type="date" key={item.date} data={data} item={item} />);
-
-  // boatTypes = data => {
-  //   return <Column type="boat" data={data} />;
-  // };
-
   render() {
     const { data, requestError } = this.props;
     return (
       <section className="results">
-        {data && (
+        {data && data.length > 1 && (
           <div className="table">
             <Column type="boat" data={data} />
             <Column type="date" data={data} />
           </div>
         )}
         {!data && !requestError && <MdDirectionsBoat className="placeholder" />}
+        {data && data.length < 1 && (
+          <div className="error">
+            <p>Sorry, no results found.</p>
+            <FaAnchor className="placeholder" />
+          </div>
+        )}
         {requestError && (
           <div className="error">
             <p>Ops! Our service is down.</p>
-            <FaAnchor className="placeholder" />
+            <MdCloudOff className="placeholder" />
           </div>
         )}
       </section>
