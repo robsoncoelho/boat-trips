@@ -1,107 +1,52 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Item from "./item";
+import React, { Component } from "react";
+import Column from "./column";
+import { connect } from "react-redux";
 import MdDirectionsBoat from "react-icons/lib/md/directions-boat";
+import FaAnchor from "react-icons/lib/fa/anchor";
+
 import "./style.scss";
 
-const Results = ({ items = true }) => {
-  return (
-    <section className="results">
-      <div className="table">
-        <div className="column">
-          <div className="index">
-            <p>Boat types</p>
-          </div>
-          <p className="row">Premier</p>
-          <p className="row">Premier Plus</p>
-          <p className="row">Catamaran</p>
-        </div>
-        <div className="column">
-          <div className="index">
-            <p>
-              19 may
-              <br />
-              (Sat)
-            </p>
-            <p>28ºC</p>
-          </div>
-          <p className="row">£516</p>
-          <p className="row">£516</p>
-          <p className="row">£516</p>
-        </div>
-        <div className="column">
-          <div className="index">
-            <p>
-              19 may
-              <br />
-              (Sat)
-            </p>
-            <p>28ºC</p>
-          </div>
-          <p className="row">£516</p>
-          <p className="row">£516</p>
-          <p className="row">£516</p>
-        </div>
-        <div className="column">
-          <div className="index">
-            <p>
-              19 may
-              <br />
-              (Sat)
-            </p>
-            <p>28ºC</p>
-          </div>
-          <p className="row">£516</p>
-          <p className="row">£516</p>
-          <p className="row">£516</p>
-        </div>
-        <div className="column">
-          <div className="index">
-            <p>
-              19 may
-              <br />
-              (Sat)
-            </p>
-            <p>28ºC</p>
-          </div>
-          <p className="row">£516</p>
-          <p className="row">£516</p>
-          <p className="row">£516</p>
-        </div>
-        <div className="column">
-          <div className="index">
-            <p>
-              19 may
-              <br />
-              (Sat)
-            </p>
-            <p>28ºC</p>
-          </div>
-          <p className="row">£516</p>
-          <p className="row">£516</p>
-          <p className="row">£516</p>
-        </div>
-        <div className="column">
-          <div className="index">
-            <p>
-              19 may
-              <br />
-              (Sat)
-            </p>
-            <p>28ºC</p>
-          </div>
-          <p className="row">£516</p>
-          <p className="row">£516</p>
-          <p className="row">£516</p>
-        </div>
-      </div>
-      {!items && <MdDirectionsBoat className="placeholder" />}
-    </section>
-  );
-};
+class Results extends Component {
+  ticketByDay = data =>
+    data.map(item => <Column type="day" key={item.date} data={item} />);
 
-Results.propTypes = {
-  items: PropTypes.object
-};
+  boatTypes = data => {
+    const boatTypes = data
+      .flatMap(item =>
+        item.products.map(x => ({
+          productClass: x.productClass,
+          productClassId: x.productClassId
+        }))
+      )
+      .filter(
+        (obj, pos, arr) =>
+          arr
+            .map(mapObj => mapObj["productClass"])
+            .indexOf(obj["productClass"]) === pos
+      );
+    return <Column type="boat" data={boatTypes} />;
+  };
 
-export default Results;
+  render() {
+    const { data, requestError } = this.props;
+    return (
+      <section className="results">
+        {data && (
+          <div className="table">
+            {this.boatTypes(data)}
+            {this.ticketByDay(data)}
+          </div>
+        )}
+        {!data && !requestError && <MdDirectionsBoat className="placeholder" />}
+        {requestError && <div className="error"><p>Ops! Our service is down.</p><FaAnchor className="placeholder" /></div>}
+      </section>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  data: state.main.data,
+  requestError: state.main.requestError
+});
+
+export default connect(mapStateToProps)(Results);
