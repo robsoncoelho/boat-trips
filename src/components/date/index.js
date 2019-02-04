@@ -1,43 +1,32 @@
 import React, { Component } from "react";
 import "react-dates/initialize";
 import { SingleDatePicker } from "react-dates";
-import { request } from "../../api";
+import { onRequestData } from "../../actions/main";
+import { connect } from "react-redux";
 import moment from "moment";
 import FaArrowCircleRight from "react-icons/lib/fa/arrow-circle-right";
 
 import "react-dates/lib/css/_datepicker.css";
 import "./style.scss";
 
-export default class Date extends Component {
+class Date extends Component {
   constructor(props) {
     super(props);
     this.state = {
       date: moment(),
-      focused: false,
-      isLoading: false
+      focused: false
     };
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.date !== this.state.date) {
-      this.searchResults(this.state.date);
+    if (prevState.date !== this.state.date && this.state.date) {
+      this.props.onRequestData(this.state.date);
     }
   }
 
-  searchResults = date => {
-    if (date) {
-      this.setState({ isLoading: true });
-      request(date.format("YYYY-MM-DD"))
-        .then(response => response[0])
-        .then(data => {
-          this.setState({ isLoading: false });
-          console.log(data);
-        });
-    }
-  };
-
   render() {
-    const { date, isLoading, focused } = this.state;
+    const { date, focused } = this.state;
+    const { isLoading } = this.props;
     return (
       <section className="date">
         <p>Select a date:</p>
@@ -58,3 +47,18 @@ export default class Date extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  isLoading: state.main.isLoading
+});
+
+const mapDispatchToProps = dispatch => ({
+  onRequestData: value => {
+    dispatch(onRequestData(value));
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Date);
