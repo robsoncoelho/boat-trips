@@ -7,25 +7,12 @@ import FaAnchor from "react-icons/lib/fa/anchor";
 import "./style.scss";
 
 class Results extends Component {
-  ticketByDay = data =>
-    data.map(item => <Column type="day" key={item.date} data={item} />);
+  // ticketByDate = data => 
+  //   data.map(item => <Column type="date" key={item.date} data={data} item={item} />);
 
-  boatTypes = data => {
-    const boatTypes = data
-      .flatMap(item =>
-        item.products.map(x => ({
-          productClass: x.productClass,
-          productClassId: x.productClassId
-        }))
-      )
-      .filter(
-        (obj, pos, arr) =>
-          arr
-            .map(mapObj => mapObj["productClass"])
-            .indexOf(obj["productClass"]) === pos
-      );
-    return <Column type="boat" data={boatTypes} />;
-  };
+  // boatTypes = data => {
+  //   return <Column type="boat" data={data} />;
+  // };
 
   render() {
     const { data, requestError } = this.props;
@@ -33,12 +20,17 @@ class Results extends Component {
       <section className="results">
         {data && (
           <div className="table">
-            {this.boatTypes(data)}
-            {this.ticketByDay(data)}
+            <Column type="boat" data={data} />
+            <Column type="date" data={data} />
           </div>
         )}
         {!data && !requestError && <MdDirectionsBoat className="placeholder" />}
-        {requestError && <div className="error"><p>Ops! Our service is down.</p><FaAnchor className="placeholder" /></div>}
+        {requestError && (
+          <div className="error">
+            <p>Ops! Our service is down.</p>
+            <FaAnchor className="placeholder" />
+          </div>
+        )}
       </section>
     );
   }

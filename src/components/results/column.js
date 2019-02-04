@@ -1,39 +1,46 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Card from "./card";
+import { getBoatTypes } from "../../utils/data";
 import "./style.scss";
 
 const Column = ({ type, data }) => {
-  const BoatColumn = ({ data }) => (
-    <div className="column">
-      <div className="index boatTypes">
-        <p>Boat types</p>
-      </div>
-      {data.map((item, index) => (
-        <Card type={type} key={index} data={item} />
-      ))}
-    </div>
-  );
+  const boatTypes = getBoatTypes(data);
 
-  const DayColumn = ({ data }) => (
+  const BoatColumn = () => (
     <div className="column">
-      <div className="index">
-        <p>
-          {data.dateText}
-          <br />({data.dateday})
-        </p>
-        <p>{data.temperature}</p>
-      </div>
-      {data.products
-        .sort((a, b) => b.productClassId - a.productClassId)
+      <div className="index boatTypes" />
+      {boatTypes
+        .sort((a, b) => a.productClassId - b.productClassId)
         .map((item, index) => (
           <Card type={type} key={index} data={item} />
         ))}
     </div>
   );
 
-  if (type === "boat") return <BoatColumn data={data} />;
-  if (type === "day") return <DayColumn data={data} />;
+  const DayColumn = () =>
+    data.map((item, index) => (
+      <div key={index} className="column">
+        <div className="index">
+          <p>
+            {item.dateText}
+            <br />({item.dateday})
+          </p>
+          <p>{item.temperature}</p>
+        </div>
+        {boatTypes
+          .sort((a, b) => a.productClassId - b.productClassId)
+          .map((boat, index) => {
+            const ticket = item.products.filter(
+              item => boat.productClassId === item.productClassId
+            )[0];
+            return <Card type={type} key={index} data={ticket} />;
+          })}
+      </div>
+    ));
+
+  if (type === "boat") return <BoatColumn />;
+  if (type === "date") return <DayColumn />;
 };
 
 Column.propTypes = {

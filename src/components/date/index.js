@@ -3,8 +3,6 @@ import "react-dates/initialize";
 import { SingleDatePicker } from "react-dates";
 import { onRequestData } from "../../actions/main";
 import { connect } from "react-redux";
-import moment from "moment";
-import FaArrowCircleRight from "react-icons/lib/fa/arrow-circle-right";
 
 import "react-dates/lib/css/_datepicker.css";
 import "./style.scss";
@@ -13,13 +11,19 @@ class Date extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: moment(),
+      date: null,
       focused: false
     };
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.date !== this.state.date && this.state.date) {
+      this.props.onRequestData(this.state.date);
+    }
+  }
+
+  buttonOnPress = () => {
+    if (this.state.date) {
       this.props.onRequestData(this.state.date);
     }
   }
@@ -40,9 +44,6 @@ class Date extends Component {
           onFocusChange={({ focused }) => this.setState({ focused })}
           id="calendar"
         />
-        <button disabled={isLoading} type="submit">
-          <FaArrowCircleRight className={isLoading ? "disabled" : undefined} />
-        </button>
       </section>
     );
   }

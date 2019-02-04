@@ -1,4 +1,4 @@
-import { request } from "../api";
+import { request } from "../utils/api";
 
 import {
   ON_REQUEST_DATA,
@@ -7,7 +7,7 @@ import {
 } from "./types";
 
 export function onRequestData(data) {
-  return (dispatch, getStore) => {
+  return (dispatch) => {
     dispatch({ type: ON_REQUEST_DATA });
 
     return fetchData(data)
