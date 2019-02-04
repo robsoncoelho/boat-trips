@@ -9,6 +9,9 @@
     font-size: calc(200px + 2vmin);
     color: $gray;
     opacity: 0.1;
+    &.loading {
+      animation: spin 1s linear infinite;
+    }
   }
   .error {
     display: flex;
@@ -25,12 +28,26 @@
     display: flex;
     flex: 1;
     margin-top: 5%;
-    max-width: 1200px;
-    .column {
-      flex: 1;
+    max-width: 1150px;
+    position: relative;
+    .scrollMore { 
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
       text-align: center;
-      &:first-of-type {
-        flex: 2;
+      margin: 0;
+      background-image: linear-gradient(to right, transparent, $white);
+      width: 30px;
+    }
+    .dates {
+      display: flex;
+      overflow: auto;
+    }
+    .column {
+      text-align: center;
+      &:last-of-type {
+        padding-right: 10px;
       }
       .index {
         height: 95px;
@@ -72,7 +89,7 @@
         }
         &.boat {
           display: flex;
-          min-width: 250px;
+          width: 250px;
           justify-content: center;
           border: 1px solid $blue;
           cursor: default;
@@ -127,4 +144,37 @@
       }
     }
   }
+}
+
+@media only screen and (max-width: 600px) {
+  .results {
+    .table {
+      max-width: 90%;
+      margin-top: 10%;
+      > .column {
+        padding-right: 10px;
+      }
+      .column {
+        flex: 1;
+        .card {
+          height: 110px;
+          &.boat {
+            width: 90%;
+            min-width: 100px;
+            p {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+      .dates {
+        flex: 2
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
