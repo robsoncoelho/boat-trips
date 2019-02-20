@@ -7,3 +7,6 @@
 
 ### Building the app for production:
 `yarn run build`
+
+### Screenshot:
+![home page](https://github.com/robsoncoelho/boat-trips/blob/master/screenshot.png)
